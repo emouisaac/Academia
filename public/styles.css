@@ -1,3 +1,14 @@
+/* Hide footer when login or signup form is visible */
+.login-form, .signup-form {
+    /* fallback: nothing here, just for reference */
+}
+.login-form:where([style*="display: block"]),
+.signup-form:where([style*="display: block"]) {
+    /* fallback: nothing here, just for reference */
+}
+.hide-footer {
+    display: none !important;
+}
 /* ...existing code... */
 /* Google Login Button Styles */
 .google-login-btn {
@@ -152,14 +163,18 @@ nav {
     font-weight: 600;
     transition: var(--transition);
     position: relative;
+    text-decoration: none;
+    color: #1565c0; /* blue for large screens */
 }
 
 .nav-links a:hover {
     color: var(--primary-color);
+    text-decoration: none;
 }
 
 .nav-links a.active {
     color: var(--primary-color);
+    text-decoration: none;
 }
 
 .nav-links a.active::after {
@@ -593,6 +608,10 @@ footer {
         padding-top: 40px;
         transition: var(--transition);
         box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .nav-links a {
+        color: #fff !important;
+        text-decoration: none !important;
     }
     
     .nav-links.active {

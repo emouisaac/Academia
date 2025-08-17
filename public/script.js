@@ -1,5 +1,23 @@
 console.log('Script loaded');
 document.addEventListener('DOMContentLoaded', function() {
+        // Footer hide/show logic
+        const footer = document.querySelector('footer');
+        function updateFooterVisibility() {
+            const loginPage = document.getElementById('login');
+            if (!footer || !loginPage) return;
+            // If login page is active and either login or signup form is visible, hide footer
+            const loginForm = document.querySelector('.login-form');
+            const signupForm = document.querySelector('.signup-form');
+            if (
+                loginPage.classList.contains('active') &&
+                ((loginForm && loginForm.style.display !== 'none') || (signupForm && signupForm.style.display !== 'none'))
+            ) {
+                footer.classList.add('hide-footer');
+            } else {
+                footer.classList.remove('hide-footer');
+            }
+        }
+
     // Navigation functionality
     const navLinks = document.querySelectorAll('.nav-links a');
     const pages = document.querySelectorAll('.page');
@@ -132,12 +150,14 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         loginForm.style.display = 'none';
         signupForm.style.display = 'block';
+            updateFooterVisibility();
     });
     
     showLogin.addEventListener('click', function(e) {
         e.preventDefault();
         loginForm.style.display = 'block';
         signupForm.style.display = 'none';
+            updateFooterVisibility();
     });
     
     // Form submissions
@@ -226,4 +246,50 @@ document.addEventListener('DOMContentLoaded', function() {
         loginBtn.textContent = 'LOG OUT';
         loginBtn.setAttribute('data-page', 'logout');
     }
+        // Initial check
+        updateFooterVisibility();
 });
+
+
+
+
+
+// Render top 100 coins, remove image icons from coin-list
+    document.addEventListener('DOMContentLoaded', function() {
+      function renderCoinList(coins) {
+        const tbody = document.getElementById('coin-list');
+        // Clear previous rows to prevent flashing old/blank symbols
+        tbody.innerHTML = '';
+        coins.slice(0, 100).forEach(function(coin) {
+          const symbol = coin.symbol.toUpperCase();
+          // Use CoinGecko API image for the coin logo
+          const img = coin.image ? `<img src="${coin.image}" alt="${symbol} logo" style="width:22px;height:22px;vertical-align:middle;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.07);margin-right:6px;">` : '';
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${img}<span style="vertical-align:middle;">${symbol}</span></td>
+            <td>$${Number(coin.current_price).toLocaleString()}</td>
+            <td style="color:${coin.price_change_percentage_24h > 0 ? '#10b981' : '#ef4444'};font-weight:600;">
+              ${coin.price_change_percentage_24h > 0 ? '+' : ''}${coin.price_change_percentage_24h.toFixed(2)}%
+            </td>
+            <td>$${Number(coin.market_cap).toLocaleString()}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      // If using an API, replace this with your fetch logic
+      if (window.top100Coins) {
+        renderCoinList(window.top100Coins);
+      } else if (typeof fetch === 'function') {
+        fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false')
+          .then(res => res.json())
+          .then(data => renderCoinList(data));
+      }
+    });
+
+
+    // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
