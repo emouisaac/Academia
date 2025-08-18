@@ -24,33 +24,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const burger = document.querySelector('.burger');
     const nav = document.querySelector('.nav-links');
 
-    // Page switching
+    // Set active nav link based on current URL/hash
+    function setActiveNavLink() {
+        let current = window.location.pathname.split('/').pop() || 'index.html';
+        let hash = window.location.hash;
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            // Match by href (ignoring domain)
+            let linkHref = link.getAttribute('href');
+            if (linkHref === current || linkHref === current + hash || (hash && linkHref.endsWith(hash))) {
+                link.classList.add('active');
+            }
+            // Special case for home
+            if ((current === '' || current === 'index.html') && linkHref === 'index.html') {
+                link.classList.add('active');
+            }
+        });
+    }
+
+    setActiveNavLink();
+    window.addEventListener('hashchange', setActiveNavLink);
+    window.addEventListener('popstate', setActiveNavLink);
+
+    // SPA-like page switching for # links only
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const pageId = this.getAttribute('data-page');
-            if (!pageId) return;
-
-            // Hide all pages
-            pages.forEach(page => {
-                page.classList.remove('active');
-            });
-
-            // Show selected page
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) {
-                targetPage.classList.add('active');
+            const href = this.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                // Scroll to section
+                const section = document.querySelector(href);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+                // Update active state
+                navLinks.forEach(navLink => navLink.classList.remove('active'));
+                this.classList.add('active');
             }
-
-            // Update active nav link
-            navLinks.forEach(navLink => {
-                navLink.classList.remove('active');
-            });
-            this.classList.add('active');
-
-            // Close mobile menu if open
-            nav.classList.remove('active');
-            burger.classList.remove('toggle');
         });
     });
     
