@@ -185,8 +185,22 @@ document.addEventListener('DOMContentLoaded', function() {
       link.addEventListener('click', function() {
         if (window.innerWidth < 992) {
           document.querySelector('.nav-links').style.right = "-200px";
-                                }
-                            });
-                        });
-                    });
-                };
+        }
+      });
+    });
+  });
+};
+
+// Hide nav on link click (for mobile)
+document.addEventListener('DOMContentLoaded', function() {
+    var navLinks = document.querySelectorAll('.nav-links a');
+    var navMenu = document.querySelector('.nav-links');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 900 && navMenu) {
+                navMenu.style.right = '-200px';
+            }
+        });
+    });
+});
+  
