@@ -259,8 +259,9 @@ nav .fas{
         margin: 20px;
     }
     .nav-links .fas{
-        font-size: 30px;
-        margin-left: 50px
+        font-size: 35px;
+        margin-left: 0px;
+        margin-top: 0px;
     }
     .nav-links ul{
         padding: 30px;

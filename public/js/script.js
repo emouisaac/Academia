@@ -166,3 +166,27 @@ function handleError(error) {
     }, 5000);
   }
 }
+
+
+/**
+ * Initializes the application
+ */
+function toggleMenu() {
+   var navLinks = document.querySelector('.nav-links');
+   if (navLinks.style.right === "0px") {
+       navLinks.style.right = "-200px";
+   } else {
+       navLinks.style.right = "0px";
+   }
+// Optional: Hide menu when clicking a link (for mobile UX)
+document.addEventListener('DOMContentLoaded', function() {
+    var navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(function(link) {
+      link.addEventListener('click', function() {
+        if (window.innerWidth < 992) {
+          document.querySelector('.nav-links').style.right = "-200px";
+                                }
+                            });
+                        });
+                    });
+                };
